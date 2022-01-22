@@ -8,9 +8,9 @@ FlexLayout Compose 版本
 
 ### FlexLayout 算法
 
-    *  FlexLayout的width为max width,height为 所有的行高之和+(行数-1)*Divider高度
-    * 子view水平顺序排列,如果累计width大于max width则另起一行,行高为该行最大的child height
-    * 默认子view为wrap content 模式,如有子view设为fillMaxWidth,则独占一行。千万不要设置为fillMaxHeight
+* FlexLayout的宽默认为fillMaxWidth,高为所有的行高之和 + (行数-1) * 行间距
+* 子组件水平顺序排列,如果累计宽度大于maxWidth则另起一行,行高为该行中子组件height最大的那个
+* 默认子组件为wrap content模式,如有子组件设为fillMaxWidth,则独占一行。千万不要设置为fillMaxHeight
 
 ### Compose 自定义布局
 
@@ -41,29 +41,40 @@ fun SimpleCustomLayout(modifier: Modifier, content: @Composable () -> Unit) {
 ```
 
 #### 入参
-
-    * content  content是必需的用于添加子view
-    * modifer  非必需,但最好由外部提供
+* content  content是必需的用于添加子view
+* modifer  非必需,但最好由外部提供
 
 #### Layout
 
-    调用Layout方法生成自定义布局.关键参数measurePolicy
-    mearsurePolicy 是测量及布局策略,用于对content提供的子组件进行测量并摆放。
+调用Layout方法生成自定义布局.关键参数measurePolicy
+
+mearsurePolicy 是测量及布局策略,用于对content提供的子组件进行测量并摆放。
 
 #### MeasurePolicy
 
-    MeasurePolicy是个接口,通常使用`Measure((measurables: List<Measurable>,constraints: Constraints)->Unit)`来生成
-    其中List<Measureable>代表content提供的子组件, constraints表示当前compose的MeasureSpce
-    注！！！ constraints中提供的maxWidth和maxHeight是计算过modifier中pending之后的值,所以这里不需要考虑pending
-    * 测量 
-        遍历measureables,并调用其`measure(constrains:Constrains)`方法进行测量。获取对应的测量结果Placeable
-        传入的Constrains就是子组件用于测量的MeasureSpce. 这里默认为当前布局可使用的最大尺寸 
-        注意！！！，compose只允许进行一次测量,也是必须的步骤。
-        这是最基本也是最简单的测量方式。如果复杂的布局,需要考虑子组件之间的相对位置关系,就需要自定义遍历顺序和计算。并且考虑约束关系给于不同的Contrains
-    * 布局
-        调用`layout(width: Int,height: Int,alignmentLines: Map<AlignmentLine, Int> = emptyMap(),placementBlock: Placeable.PlacementScope.() -> Unit)`方法对进行布局。
-        width,height表示自身的测量结果,placementBlock是具体的布局流程。
-        测量后的Placeable表示为可布局对象。通过`place(x:Int,y:Int)`方法对其进行摆放。x,y表示其距当前组件左上角的偏移量。
+MeasurePolicy是个接口,通常使用`Measure((measurables: List<Measurable>,constraints: Constraints)->Unit)`来生成
+    
+其中List<Measureable>代表content提供的子组件, constraints表示当前compose的MeasureSpce
+    
+注！！！ constraints中提供的maxWidth和maxHeight是计算过modifier中pending之后的值,所以这里不需要考虑pending
+* 测量 
+   
+   遍历measureables,并调用其`measure(constrains:Constrains)`方法进行测量。获取对应的测量结果Placeable
+   
+   传入的Constrains就是子组件用于测量的MeasureSpce. 这里默认为当前布局可使用的最大尺寸 
+   
+   注意！！！，compose只允许进行一次测量,也是必须的步骤。
+   
+   这是最基本也是最简单的测量方式。
+   
+   如果复杂的布局,需要考虑子组件之间的相对位置关系。需要自定义遍历顺序和计算，并且考虑约束关系给于不同的Contrains
+* 布局
+   
+   调用`layout(width: Int,height: Int,alignmentLines: Map<AlignmentLine, Int> = emptyMap(),placementBlock: Placeable.PlacementScope.() -> Unit)`方法对进行布局。
+   
+   width,height表示自身的测量结果,placementBlock是具体的布局流程。
+   
+   测量后的Placeable表示为可布局对象。通过`place(x:Int,y:Int)`方法对其进行摆放。x,y表示其距当前组件左上角的偏移量。
 
 ## 编码
 
@@ -101,8 +112,10 @@ val placeable = measurables.map {
 height += lineHeight
 ```
 
-代码很简单,每换一行就加上行高和divider,同时计算每行的最大height. 因为是alpha版,所以不考虑纵向的差别,默认顶部对齐 最终为sum(lineHeight)+(line
-count-1)*divider
+代码很简单,每换一行就加上行高和divider,同时计算每行的最大height
+   
+   因为是alpha版,所以不考虑纵向的差别,默认顶部对齐 
+   最终为`sum(lineHeight)+(linecount-1)*divider`
 
 #### 布局
 
@@ -123,7 +136,9 @@ layout(constraints.maxWidth, height) {
 }
 ```
 
-这代码是不是看起来很眼熟? 都是对Placeable的遍历,除了多了个place方法,其它基本上一模一样 搞定收工,来个preview看下效果
+这代码是不是看起来很眼熟? 都是对Placeable的遍历,除了多了个place方法,其它基本上一模一样 
+   
+搞定收工,来个preview看下效果
 
 ```kotlin
 @Preview
@@ -168,7 +183,6 @@ fun FlexLayoutBeta(
 ```
 
 我们只需要水平排列,所以入参的类型就使用 Arrangement.Horizontal。主要有以下几种
-
 * Arrangement.Start,Arrangement.End 从左,右 起顺序排列
 * Arrangement.Center 水平居中排列,item的间距为divider
 * Arrangement.SpaceEvenly 水平居中排列, item的间距和边距相等。
@@ -177,8 +191,13 @@ fun FlexLayoutBeta(
 
 #### 纵向居中对齐和代码优化
 
-纵向居中对齐需要在布局时就知道这一行的行高,然后计算item的height和行高的差距。所以需要在测量时把每一行的行高都保存下来。
-同时,为了水平排列的space计算,还需要保存每一行的item的总width 所以这里定义一个类用来保存这些数据
+纵向居中对齐需要在布局时就知道这一行的行高,然后计算item的height和行高的差距。
+   
+所以需要在测量时把每一行的行高都保存下来。
+   
+同时,为了水平排列的space计算,还需要保存每一行的item的总width 
+   
+这里定义一个类用来保存这些数据
 
 ```kotlin
 data class FlexLine(
@@ -188,10 +207,12 @@ data class FlexLine(
 )
 ```
 
-这样在测量完毕后,我们就可以获得一个List<LineData>用于布局。在布局时就只需要着眼于每一行的摆放 这样不同的排列方式在纵向上是完全相同的,水平上的差边也只是起始位置和间距的不同
+这样在测量完毕后,我们就可以获得一个List<LineData>用于布局。
+   
+在布局时就只需要着眼于每一行的摆放 这样不同的排列方式在纵向上是完全相同的,水平上的差边也只是起始位置和间距的不同
 
 ```kotlin
-        var lineHeight = 0
+var lineHeight = 0
 var lineWidth = 0
 val lines = LinkedList<LineData>()
 var temp = LinkedList<Placeable>()
@@ -219,8 +240,8 @@ height += lineHeight
 
 #### Layout
 
-```kotlin
 布局时就可以只考虑水平排列了,可以用when来选择不同的排列方法,这里只需要四个参数,childX的起始由排列方法自行计算
+```kotlin
 layout(constraints.maxWidth, height) {
     var childY = 0
     lines.forEach { lineData ->
@@ -260,7 +281,11 @@ fun Placeable.PlacementScope.layoutByCenter(
 }
 ```
 
-这里有个问题,抽出一个方法后place方法不能使用。因为他需要运行在PlacementScope里。 所以方法需要定义成PlacementScope的扩展方法 现在就优雅多了,但是还可以优化
+这里有个问题,抽出一个方法后place方法不能使用。因为他需要运行在`PlacementScope`里。 
+   
+所以方法需要定义成`PlacementScope`的扩展方法 
+   
+现在就优雅多了,但是还可以优化
 
 ### FlexLayout 1.0
 
@@ -274,7 +299,9 @@ Beta版已经可以用了,但还有以下几个问题
 
 #### 优化方案
 
-一个比较好的解决办法是用策略模式定义接口,同时提供几个默认实现。 这样默认实现不能满足需求时,用户可以传入自定义的实现
+一个比较好的解决办法是用策略模式定义接口,同时提供几个默认实现。 
+   
+这样默认实现不能满足需求时,用户可以传入自定义的实现
 
 ```kotlin
 interface IFlexArrangement {
@@ -307,7 +334,9 @@ fun FlexLayout(
 }
 ```   
 
-抽成接口后就不能当成扩展方法来定义了,所以这里需要增加一个action用来执行place. action需要在Placeable.PlacementScope中生成,并在遍历时做为参数传入接口中
+抽成接口后就不能当成扩展方法来定义了,所以这里需要增加一个action用来执行place. 
+   
+action需要在`Placeable.PlacementScope`中生成。在遍历时调用接口并做为参数传入方法中
 
 #### 默认实现
 
