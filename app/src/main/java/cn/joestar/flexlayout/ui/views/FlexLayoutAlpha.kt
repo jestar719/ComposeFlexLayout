@@ -1,4 +1,4 @@
-package cn.joestar.flexlaout.ui.views
+package cn.joestar.flexlayout.ui.views
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable

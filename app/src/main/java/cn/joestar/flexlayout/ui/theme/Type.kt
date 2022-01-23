@@ -1,4 +1,4 @@
-package cn.joestar.flexlaout.ui.theme
+package cn.joestar.flexlayout.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
