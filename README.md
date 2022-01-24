@@ -155,7 +155,7 @@ fun FlexLayoutAlphaPreview() {
     }
 }
 ```
-![image](https://github.com/jestar719/ComposeFlexLayout/blob/main/image/FlexLayoutAlpha.webp)
+![image](https://github.com/jestar719/ComposeFlexLayout/blob/main/image/FlexLayoutAlpha.jpg)
 
 
 #### 优化
@@ -391,7 +391,7 @@ class FlexArrangementAround : AbsFlexArrangement() {
 ```
    basic            |  space
 :-------------------------:|:-------------------------:
-![image](https://github.com/jestar719/ComposeFlexLayout/blob/main/image/FlexLayoutPreview1.webp)  |  ![image](https://github.com/jestar719/ComposeFlexLayout/blob/main/image/FlexLayoutPreview2.webp)
+![image](https://github.com/jestar719/ComposeFlexLayout/blob/main/image/FlexLayoutPreview1.jpg)  |  ![image](https://github.com/jestar719/ComposeFlexLayout/blob/main/image/FlexLayoutPreview2.jpg)
 
 
 ### 使用
@@ -399,7 +399,7 @@ class FlexArrangementAround : AbsFlexArrangement() {
 不过这已经超出了自定义布局的范围了，这里就不多说了，可以运行Demo参考。
   SingleSelect            |  MultiSelect
 :-------------------------:|:-------------------------:
-![SingleSelect](https://github.com/jestar719/ComposeFlexLayout/blob/main/image/SingleSelect.webp)  |  ![MultiSelectFlexLayout](https://github.com/jestar719/ComposeFlexLayout/blob/main/image/multiSelect.webp)
+![SingleSelect](https://github.com/jestar719/ComposeFlexLayout/blob/main/image/SingleSelect.jpg)  |  ![MultiSelectFlexLayout](https://github.com/jestar719/ComposeFlexLayout/blob/main/image/MultiSelect.jpg)
 
 
 
