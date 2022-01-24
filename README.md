@@ -41,8 +41,8 @@ fun SimpleCustomLayout(modifier: Modifier, content: @Composable () -> Unit) {
 ```
 
 #### 入参
-* content  content是必需的用于添加子view
-* modifer  非必需,但最好由外部提供
+* content  content是必需的用于生成子组件
+* modifer  必需,主要提供pendding
 
 #### Layout
 
