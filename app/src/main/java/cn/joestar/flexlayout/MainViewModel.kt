@@ -52,4 +52,18 @@ class MainViewModel : ViewModel() {
         }
         itemNames.value = list
     }
+
+    fun onSingleSelect(index: Int): String {
+        return itemNames.value[index]
+    }
+
+
+    fun onMultiSelect(sequence: String): String {
+        val value = sequence.asSequence().mapIndexed { index, c ->
+            if (c == '1') itemNames.value[index] else ""
+        }.filter {
+            it.isNotEmpty()
+        }.toList().toString()
+        return "$value was selected"
+    }
 }

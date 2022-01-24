@@ -1,5 +1,6 @@
 package cn.joestar.flexlayout.ui.views
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -17,10 +18,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cn.joestar.flexlayout.ui.theme.FlexLayoutTheme
 import java.util.regex.Pattern
 
 @Composable
@@ -96,7 +95,12 @@ fun numFilter(string: String): String {
 }
 
 @Composable
-fun FlexTopBar(types: List<String>, onTypeSelect: (String) -> Unit) {
+fun FlexTopBar(
+    isSingleSelect: Boolean,
+    types: List<String>,
+    onTypeSelect: (String) -> Unit,
+    onSingleChange: (Boolean) -> Unit
+) {
     val expend = remember {
         mutableStateOf(false)
     }
@@ -104,6 +108,9 @@ fun FlexTopBar(types: List<String>, onTypeSelect: (String) -> Unit) {
         modifier = Modifier.fillMaxWidth(),
         title = { Text(text = "FlexLayoutDemo") },
         actions = {
+            Button(onClick = { onSingleChange(!isSingleSelect) }) {
+                Text(text = if (isSingleSelect) "单选" else "多选")
+            }
             IconButton(onClick = { expend.value = !expend.value }) {
                 Icon(Icons.Default.MoreVert, contentDescription = "more")
             }
@@ -124,15 +131,17 @@ fun FlexTopBar(types: List<String>, onTypeSelect: (String) -> Unit) {
 @Composable
 fun MainView(
     color: Color,
+    single: Boolean,
     list: List<String>,
     onAction: (String, String) -> Unit,
     onTypeSelect: (String) -> Unit,
+    onSingleChange: (Boolean) -> Unit,
     onClick: () -> Unit,
-    content: @Composable () -> Unit
+    content: @Composable (PaddingValues) -> Unit
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { FlexTopBar(list, onTypeSelect) },
+        topBar = { FlexTopBar(single, list, onTypeSelect, onSingleChange) },
         bottomBar = {
             BottomAppBar(
                 cutoutShape = RoundedCornerShape(50)
@@ -150,25 +159,23 @@ fun MainView(
             }
         },
         floatingActionButtonPosition = FabPosition.Center,
-        isFloatingActionButtonDocked = true
-    ) {
-        content.invoke()
-    }
+        isFloatingActionButtonDocked = true,
+        content = content
+    )
 }
 
-
-@Preview
 @Composable
-fun BottomBarPreview() {
-    FlexLayoutTheme {
-        Surface {
-            MainView(
-                color = MaterialTheme.colors.primary,
-                list = arrayListOf("Start", "End", "Center"),
-                onAction = { x, y -> },
-                onClick = {},
-                onTypeSelect = { type -> }
-            ) {}
-        }
+fun FlexToast(msg: String, color: Color, onDismiss: () -> Unit) {
+    if (msg.isNotEmpty()) {
+        AlertDialog(onDismissRequest = onDismiss,
+            confirmButton = {
+                Text(
+                    text = "OK", color = color, modifier = Modifier
+                        .padding(8.dp)
+                        .clickable(onClick = onDismiss)
+                )
+            },
+            text = { Text(text = msg) }
+        )
     }
 }
