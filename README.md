@@ -394,6 +394,12 @@ class FlexArrangementAround : AbsFlexArrangement() {
 ![image](https://github.com/jestar719/ComposeFlexLayout/blob/main/image/FlexLayoutPreview1.webp)  |  ![image](https://github.com/jestar719/ComposeFlexLayout/blob/main/image/FlexLayoutPreview2.webp)
 
 
+### 使用
+有了可用的FlexLayout,那么实现单选,多选就是下一步需要考虑的问题了。
+不过这已经超出了自定义布局的范围了，这里就不多说了，可以运行Demo参考。
+  SingleSelect            |  MultiSelect
+:-------------------------:|:-------------------------:
+![SingleSelect](https://github.com/jestar719/ComposeFlexLayout/blob/main/image/SingleSelect.webp)  |  ![MultiSelectFlexLayout](https://github.com/jestar719/ComposeFlexLayout/blob/main/image/multiSelect.webp)
 
 
 
