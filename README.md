@@ -139,7 +139,6 @@ layout(constraints.maxWidth, height) {
 这代码是不是看起来很眼熟? 都是对Placeable的遍历,除了多了个place方法,其它基本上一模一样 
    
 搞定收工,来个preview看下效果
-
 ```kotlin
 @Preview
 @Composable
@@ -156,6 +155,8 @@ fun FlexLayoutAlphaPreview() {
     }
 }
 ```
+![image](https://github.com/jestar719/ComposeFlexLayout/blob/main/image/FlexLayoutAlpha.webp)
+
 
 #### 优化
 
@@ -388,7 +389,9 @@ class FlexArrangementAround : AbsFlexArrangement() {
     }
 }
 ```
-
+   basic            |  space
+:-------------------------:|:-------------------------:
+![image](https://github.com/jestar719/ComposeFlexLayout/blob/main/image/FlexLayoutPreview1.webp)  |  ![image](https://github.com/jestar719/ComposeFlexLayout/blob/main/image/FlexLayoutPreview2.webp)
 
 
 
