@@ -1,6 +1,5 @@
 package cn.joestar.flexlayout.ui.views
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -23,7 +22,7 @@ import androidx.compose.ui.unit.sp
 import java.util.regex.Pattern
 
 @Composable
-fun BottomBar(onAction: (String, String) -> Unit) {
+fun BottomBar(onInputChanged: (length: String, count: String) -> Unit) {
     val maxLength = 10
     val maxCount = 100
     var count by remember {
@@ -47,7 +46,7 @@ fun BottomBar(onAction: (String, String) -> Unit) {
                     numFilter = minOf(numFilter.toInt(), maxLength).toString()
                 }
                 length = numFilter
-                onAction(length, count)
+                onInputChanged(length, count)
             })
         NumberInput(count,
             label = "Item Count",
@@ -57,7 +56,7 @@ fun BottomBar(onAction: (String, String) -> Unit) {
                     numFilter = minOf(numFilter.toInt(), maxCount).toString()
                 }
                 count = numFilter
-                onAction(length, count)
+                onInputChanged(length, count)
             })
     }
 }
@@ -89,8 +88,8 @@ fun NumberInput(value: String, label: String, onValueChanged: (String) -> Unit) 
 }
 
 fun numFilter(string: String): String {
-    val regEx = "[^0-9]";
-    val p = Pattern.compile(regEx);
+    val regEx = "[^0-9]"
+    val p = Pattern.compile(regEx)
     return p.matcher(string).replaceAll("").trim()
 }
 
@@ -131,27 +130,27 @@ fun FlexTopBar(
 @Composable
 fun MainView(
     color: Color,
-    single: Boolean,
+    isSingle: Boolean,
     list: List<String>,
-    onAction: (String, String) -> Unit,
+    onInputChanged: (String, String) -> Unit,
     onTypeSelect: (String) -> Unit,
-    onSingleChange: (Boolean) -> Unit,
-    onClick: () -> Unit,
+    onSingleChanged: (Boolean) -> Unit,
+    onCreateItems: () -> Unit,
     content: @Composable (PaddingValues) -> Unit
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { FlexTopBar(single, list, onTypeSelect, onSingleChange) },
+        topBar = { FlexTopBar(isSingle, list, onTypeSelect, onSingleChanged) },
         bottomBar = {
             BottomAppBar(
                 cutoutShape = RoundedCornerShape(50)
             ) {
-                BottomBar(onAction = onAction)
+                BottomBar(onInputChanged)
             }
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = onClick,
+                onClick = onCreateItems,
                 backgroundColor = color,
                 shape = RoundedCornerShape(50),
             ) {
@@ -164,18 +163,3 @@ fun MainView(
     )
 }
 
-@Composable
-fun FlexToast(msg: String, color: Color, onDismiss: () -> Unit) {
-    if (msg.isNotEmpty()) {
-        AlertDialog(onDismissRequest = onDismiss,
-            confirmButton = {
-                Text(
-                    text = "OK", color = color, modifier = Modifier
-                        .padding(8.dp)
-                        .clickable(onClick = onDismiss)
-                )
-            },
-            text = { Text(text = msg) }
-        )
-    }
-}

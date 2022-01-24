@@ -26,20 +26,20 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
                     val model = viewModels<MainViewModel>().value
-                    var single by remember {
+                    var isSingle by remember {
                         mutableStateOf(true)
                     }
                     MainView(
                         color = MaterialTheme.colors.primary,
-                        single = single,
+                        isSingle = isSingle,
                         list = model.types,
-                        onAction = model::onAction,
+                        onInputChanged = model::onAction,
                         onTypeSelect = model::onTypeSelect,
-                        onClick = model::onClick,
-                        onSingleChange = { single = it },
+                        onCreateItems = model::onClick,
+                        onSingleChanged = { isSingle = it },
                     ) {
                         val color = MaterialTheme.colors.primary
-                        if (single) {
+                        if (isSingle) {
                             SingleSelectFlexLayout(
                                 color = color,
                                 arrangement = model.arrangementState.value,
